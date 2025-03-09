@@ -8,6 +8,7 @@ export {
 } from './createIsomorphicFn'
 export {
   createServerFn,
+  ValidatorError,
   type JsonResponse,
   type ServerFn as FetchFn,
   type ServerFnCtx as FetchFnCtx,

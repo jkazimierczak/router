@@ -339,6 +339,7 @@ export type {
   ResolveValidatorInput,
   ResolveValidatorOutputFn,
   ResolveValidatorOutput,
+  NormalizedValidatorIssues,
 } from './validators'
 
 export type {

@@ -154,6 +154,11 @@ function getDotPath(issue: AnyStandardSchemaValidateIssue): string | null {
   return null
 }
 
+export type NormalizedValidatorIssues = {
+  root: ReadonlyArray<string>
+  issues: Record<string, ReadonlyArray<string>>
+}
+
 /**
  * Extract spec-guaranteed issue's fields from validation results.
  *
@@ -163,7 +168,7 @@ function getDotPath(issue: AnyStandardSchemaValidateIssue): string | null {
  */
 export function normalizeValidatorIssues(
   issues: ReadonlyArray<AnyStandardSchemaValidateIssue>,
-) {
+): NormalizedValidatorIssues {
   const pathlessIssues: Array<string> = []
   const issueMap: Record<string, Array<string>> = {}
 

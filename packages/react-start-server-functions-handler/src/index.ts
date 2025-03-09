@@ -6,7 +6,7 @@ import {
   getResponseStatus,
   toWebRequest,
 } from '@tanstack/react-start-server'
-import { startSerializer } from '@tanstack/react-start-client'
+import { ValidatorError, startSerializer } from '@tanstack/react-start-client'
 // @ts-expect-error
 import _serverFnManifest from 'tsr:server-fn-manifest'
 import type { H3Event } from '@tanstack/react-start-server'
@@ -261,6 +261,10 @@ async function handleServerRequest({
         return redirectOrNotFoundResponse(error)
       }
 
+      if (error instanceof ValidatorError) {
+        return validatorErrorResponse(error)
+      }
+
       console.info()
       console.info('Server Fn Error!')
       console.info()
@@ -296,6 +300,18 @@ async function handleServerRequest({
   if (process.env.NODE_ENV === 'development') console.info()
 
   return response
+}
+
+function validatorErrorResponse(error: any) {
+  const { headers, ...rest } = error
+
+  return new Response(JSON.stringify(rest), {
+    status: 400,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(headers || {}),
+    },
+  })
 }
 
 function redirectOrNotFoundResponse(error: any) {

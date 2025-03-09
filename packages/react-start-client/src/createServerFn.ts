@@ -10,6 +10,7 @@ import type {
   AnyValidator,
   Constrain,
   Expand,
+  NormalizedValidatorIssues,
   ResolveValidatorInput,
   SerializerParse,
   SerializerStringify,
@@ -794,6 +795,14 @@ const applyMiddleware = async (
   } as any)
 }
 
+export class ValidatorError extends Error {
+  constructor(public readonly issues: NormalizedValidatorIssues) {
+    super(JSON.stringify(issues, undefined, 2))
+    this.name = 'ValidatorError'
+    this.issues = issues
+  }
+}
+
 function execValidator(validator: AnyValidator, input: unknown): unknown {
   if (validator == null) return {}
 
@@ -805,7 +814,7 @@ function execValidator(validator: AnyValidator, input: unknown): unknown {
 
     if (result.issues) {
       const issues = normalizeValidatorIssues(result.issues)
-      throw new Error(JSON.stringify(issues, undefined, 2))
+      throw new ValidatorError(issues)
     }
 
     return result.value
